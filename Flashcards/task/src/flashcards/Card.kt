@@ -5,24 +5,32 @@ import com.example.flashcards.mutableMapCardsNameAndDefinition
 
 class Card {
 
-    fun createCards(numberOfCards: Int) {
+    fun createCards() {
 
-        for (cardNum in 1..numberOfCards) {
-            Bot().sayInputCardNumName(cardNum)
-            var term = Bot.readData()
-            while (mutableMapCardsNameAndDefinition.containsKey(term)) {
+            Bot().sayInputCard()
+            val term = Bot.readData()
+            if (mutableMapCardsNameAndDefinition.containsKey(term)) {
                 Bot().sayTermAlreadyExists(term)
-                term = Bot.readData()
             }
 
-            Bot().sayInputCardDefinition(cardNum)
-            var definition = Bot.readData()
-            while (mutableMapCardsNameAndDefinition.containsValue(definition)) {
+            Bot().sayInputCardDefinition()
+            val definition = Bot.readData()
+            if (mutableMapCardsNameAndDefinition.containsValue(definition)) {
                 Bot().sayDefinitionAlreadyExists(definition)
-                definition = Bot.readData()
             }
 
             mutableMapCardsNameAndDefinition += Pair(term, definition)
+            Bot().sayPairAdded(term, definition)
+    }
+
+    fun removeCard() {
+        Bot().sayWhichCard()
+        val cardToRemove = Bot.readData()
+        if (mutableMapCardsNameAndDefinition.containsKey(cardToRemove)) {
+            mutableMapCardsNameAndDefinition.remove(cardToRemove)
+            Bot().sayCardRemoved()
+        } else {
+            Bot().sayCanNotRemove(cardToRemove)
         }
     }
 
