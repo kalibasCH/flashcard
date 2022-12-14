@@ -263,6 +263,15 @@ files:
         fun sayWrong(rightAnswer: String) = println("Wrong. The right answer is \"$rightAnswer\".")
     }
   learner_created: true
+- name: src/flashcards/Card.kt
+  visible: true
+  learner_created: true
+- name: src/flashcards/StartProgram.kt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7489#comment
-status: Unchecked
+status: Solved
+feedback:
+  message: Congratulations!
+  time: Wed, 14 Dec 2022 12:25:33 UTC
 record: -1
