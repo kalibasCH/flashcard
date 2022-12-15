@@ -1,11 +1,12 @@
-package com.example.flashcards
-
-import flashcards.StartProgram
+package flashcards
 
 val mutableMapCardsNameAndDefinition = mutableMapOf<String, String>()
 const val ADD = "add"
 const val REMOVE = "remove"
 const val EXIT = "exit"
+const val IMPORT = "import"
+const val EXPORT = "export"
+const val ASK = "ask"
 
 fun main() {
     StartProgram().start()
@@ -13,51 +14,6 @@ fun main() {
 
 /*
 
-Input the action (add, remove, import, export, ask, exit):
-> import
-File name:
-> ghost_file.txt
-File not found.
-
-Input the action (add, remove, import, export, ask, exit):
-> add
-The card:
-> Japan
-The definition of the card:
-> Tokyo
-The pair ("Japan":"Tokyo") has been added.
-
-Input the action (add, remove, import, export, ask, exit):
-> add
-The card:
-> Russia
-The definition of the card:
-> UpdateMeFromFile
-The pair ("Russia":"UpdateMeFromFile") has been added.
-
-Input the action (add, remove, import, export, ask, exit):
-> import
-File name:
-> capitals.txt
-28 cards have been loaded.
-
-Input the action (add, remove, import, export, ask, exit):
-> ask
-How many times to ask?
-> 1
-Print the definition of "Russia":
-> Moscow
-Correct!
-
-Input the action (add, remove, import, export, ask, exit):
-> export
-File name:
-> capitalsNew.txt
-29 cards have been saved.
-
-Input the action (add, remove, import, export, ask, exit):
-> exit
-Bye bye!
 Пример 3: программа несколько раз запрашивает определения
 
 Input the action (add, remove, import, export, ask, exit):

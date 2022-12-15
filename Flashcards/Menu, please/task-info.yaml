@@ -422,6 +422,171 @@ files:
     Abuja\",\n                \"Berlin\"\n        );\n    }\n    \n}\n\n\n\n\n\n\n\
     \n\n\n\n\n"
   learner_created: false
+- name: src/flashcards/Bot.kt
+  visible: true
+  text: |-
+    package com.example.flashcards
+
+    class Bot {
+
+        fun sayInputTheAction() = println("Input the action (add, remove, import, export, ask, exit):")
+
+        fun sayPrintInputNumberCards() = println("Input the number of cards:")
+
+        fun sayInputCard() = println("The card:")
+
+        fun sayInputCardDefinition() = println("The definition of the card:")
+
+        fun sayPrintDefinitionOf(term: String) = println("Print the definition of \"$term\":")
+
+        fun sayCorrect() = println("Correct!")
+
+        fun sayWrong(rightAnswer: String) = println("Wrong. The right answer is \"$rightAnswer\".")
+
+        fun sayWrongButDefinitionIsExist(rightAnswer: String, rightTermForDefinition: String) = println(
+            "Wrong. The right answer is \"$rightAnswer\", but your definition is correct for \"$rightTermForDefinition\"."
+        )
+
+        fun sayTermAlreadyExists(term: String) =
+            println("The card \"$term\" already exists.")
+
+        fun sayDefinitionAlreadyExists(definition: String) =
+            println("The definition \"$definition\" already exists. Try again:")
+
+        fun sayPairAdded(term: String, definition: String) = println("The pair (\"$term\":\"$definition\") has been added.")
+
+        fun sayWhichCard() = println("Which card?")
+
+        fun sayCardRemoved() = println("The card has been removed.")
+
+        fun sayCanNotRemove(term: String) = println("Can't remove \"$term\": there is no such card.")
+
+        fun sayBye() = println("Bye bye!")
+
+        fun sayFileNotFound() = println("File not found.")
+
+        fun sayCardsHaveBeenLoaded(numberOfLoadedCards: Int) = println("$numberOfLoadedCards cards have been loaded.")
+
+        companion object {
+            fun readData(): String {
+                return readln()
+            }
+        }
+
+        object importData {
+            fun import(path: String) {
+
+            }
+        }
+    }
+  learner_created: true
+- name: src/flashcards/Card.kt
+  visible: true
+  text: |-
+    package flashcards
+
+    import com.example.flashcards.Bot
+    import com.example.flashcards.mutableMapCardsNameAndDefinition
+    import java.io.File
+
+    class Card {
+
+        fun createCards() {
+                Bot().sayInputCard()
+                val term = Bot.readData()
+                if (mutableMapCardsNameAndDefinition.containsKey(term)) {
+                    Bot().sayTermAlreadyExists(term)
+                }
+
+                Bot().sayInputCardDefinition()
+                val definition = Bot.readData()
+                if (mutableMapCardsNameAndDefinition.containsValue(definition)) {
+                    Bot().sayDefinitionAlreadyExists(definition)
+                }
+
+                mutableMapCardsNameAndDefinition += Pair(term, definition)
+                Bot().sayPairAdded(term, definition)
+        }
+
+        fun removeCard() {
+            Bot().sayWhichCard()
+            val cardToRemove = Bot.readData()
+            if (mutableMapCardsNameAndDefinition.containsKey(cardToRemove)) {
+                mutableMapCardsNameAndDefinition.remove(cardToRemove)
+                Bot().sayCardRemoved()
+            } else {
+                Bot().sayCanNotRemove(cardToRemove)
+            }
+        }
+
+        fun openCards() {
+            for ((term, definition) in mutableMapCardsNameAndDefinition) {
+                Bot().sayPrintDefinitionOf(term)
+                val answer = Bot.readData()
+                if (answer == definition) {
+                    Bot().sayCorrect()
+                } else if (mutableMapCardsNameAndDefinition.containsValue(answer)) {
+                    var rightTermForDefinition = ""
+                    mutableMapCardsNameAndDefinition.forEach { if (it.value == answer) rightTermForDefinition = it.key }
+                    Bot().sayWrongButDefinitionIsExist(definition, rightTermForDefinition)
+                } else {
+                    Bot().sayWrong(definition)
+                }
+            }
+        }
+
+        fun importCard() {
+            val pathFile = Bot.readData()
+            if (!File(pathFile).exists()) {
+                Bot().sayFileNotFound()
+            } else {
+                //
+                val numberOfLoadedCards = 0
+                Bot().sayCardsHaveBeenLoaded(numberOfLoadedCards)
+            }
+
+        }
+
+    }
+  learner_created: true
+- name: src/flashcards/StartProgram.kt
+  visible: true
+  text: |-
+    package flashcards
+
+    import com.example.flashcards.*
+    import kotlin.system.exitProcess
+
+    class StartProgram {
+
+        fun start() {
+            Bot().sayInputTheAction()
+            when (Bot.readData()) {
+                ADD -> {
+                    Card().createCards()
+                    start()
+                }
+                REMOVE -> {
+                    Card().removeCard()
+                    start()
+                }
+                IMPORT -> {
+                    Card().importCard()
+                }
+                EXIT -> {
+                    Bot().sayBye()
+                    exitProcess(0)
+                }
+            }
+            Bot().sayPrintInputNumberCards()
+            Card().createCards()
+            Card().openCards()
+        }
+    }
+  learner_created: true
+- name: src/flashcards/File.kt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7490#comment
 status: Unchecked
 record: -1

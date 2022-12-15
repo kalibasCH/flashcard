@@ -1,31 +1,37 @@
 package flashcards
 
-import com.example.flashcards.ADD
-import com.example.flashcards.Bot
-import com.example.flashcards.EXIT
-import com.example.flashcards.REMOVE
+import com.example.flashcards.*
 import kotlin.system.exitProcess
 
 class StartProgram {
 
     fun start() {
-        Bot().sayInputTheAction()
+        Bot.Talk.sayInputTheAction()
         when (Bot.readData()) {
             ADD -> {
-                Card().createCards()
+                Bot.WorkWithCards.addedCard()
                 start()
             }
             REMOVE -> {
-                Card().removeCard()
+                Bot.WorkWithCards.removedCard()
+                start()
+            }
+            ASK -> {
+                Bot.WorkWithCards.ask()
+                start()
+            }
+            IMPORT -> {
+                File().ImportCards().import()
+                start()
+            }
+            EXPORT -> {
+                File().ExportCards().export()
                 start()
             }
             EXIT -> {
-                Bot().sayBye()
+                Bot.Talk.sayBye()
                 exitProcess(0)
             }
         }
-        Bot().sayPrintInputNumberCards()
-        Card().createCards()
-        Card().openCards()
     }
 }
