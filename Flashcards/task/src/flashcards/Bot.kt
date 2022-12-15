@@ -68,14 +68,17 @@ class Bot {
             val term = readData()
             if (mutableMapCardsNameAndDefinition.containsKey(term)) {
                 Talk.sayTermAlreadyExists(term)
+                return
             }
             Talk.sayInputCardDefinition()
             val definition = readData()
             if (mutableMapCardsNameAndDefinition.containsValue(definition)) {
                 Talk.sayDefinitionAlreadyExists(definition)
+                return
             }
             mutableMapCardsNameAndDefinition += Pair(term, definition)
             Talk.sayPairAdded(term, definition)
+
         }
 
         fun removedCard() {
@@ -92,20 +95,24 @@ class Bot {
         fun ask() {
             Talk.sayHowManyTimeToAsk()
             val numberOfQuestions = readData().toInt()
+            val listMyCards = mutableMapCardsNameAndDefinition.toList().toMutableList()
             repeat(numberOfQuestions) {
-                val listMyCards = mutableMapCardsNameAndDefinition.toList().toMutableList()
-                val randomCard = listMyCards[Random().nextInt(mutableMapCardsNameAndDefinition.size - 1)]
+                val randomCard =
+                    listMyCards[Random().nextInt(listMyCards.size)]
                 Talk.sayPrintTheDefinitionOf(randomCard.first)
                 val answer = readData()
                 if (answer == randomCard.second) {
                     Talk.sayCorrect()
                 } else if (mutableMapCardsNameAndDefinition.containsValue(answer)) {
                     var rightTermForDefinition = ""
-                    mutableMapCardsNameAndDefinition.forEach { if (it.value == answer) rightTermForDefinition = it.key }
+                    mutableMapCardsNameAndDefinition.forEach {
+                        if (it.value == answer) rightTermForDefinition = it.key
+                    }
                     Talk.sayWrongButDefinitionIsExist(randomCard.second, rightTermForDefinition)
                 } else {
                     Talk.sayWrong(randomCard.second)
                 }
+                listMyCards.remove(randomCard)
             }
         }
     }

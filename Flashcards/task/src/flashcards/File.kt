@@ -22,9 +22,13 @@ class File {
             if (!File(pathFile).exists()) {
                 Bot.Talk.sayFileNotFound()
             } else {
+                var countImportedCard = 0
                 cardAdapter.fromJson(File(pathFile).readLines()[0])
-                    ?.forEach { mutableMapCardsNameAndDefinition[it.term] = it.definition }
-                Bot.Talk.sayCardsHaveBeenLoaded(mutableMapCardsNameAndDefinition.size)
+                    ?.forEach {
+                        countImportedCard++
+                        mutableMapCardsNameAndDefinition[it.term] = it.definition
+                    }
+                Bot.Talk.sayCardsHaveBeenLoaded(countImportedCard)
             }
         }
     }
@@ -34,9 +38,13 @@ class File {
             Bot.Talk.sayFileName()
             val pathFile = Bot.readData()
             val listOfCards = mutableListOf<Card>()
-            mutableMapCardsNameAndDefinition.forEach { listOfCards.add(Card(it.key, it.value)) }
+            var countExportedCard = 0
+            mutableMapCardsNameAndDefinition.forEach {
+                countExportedCard++
+                listOfCards.add(Card(it.key, it.value))
+            }
             File(pathFile).writeText(cardAdapter.toJson(listOfCards))
-            Bot.Talk.sayCardSaved(mutableMapCardsNameAndDefinition.size)
+            Bot.Talk.sayCardSaved(countExportedCard)
         }
     }
 }
