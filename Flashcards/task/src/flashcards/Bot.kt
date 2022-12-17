@@ -2,63 +2,118 @@ package com.example.flashcards
 
 import flashcards.mutableMapCardsNameAndDefinition
 import java.util.Random
+import java.io.File
+import java.nio.file.Files
+import kotlin.io.path.Path
 
 class Bot {
 
     companion object {
         fun readData(): String {
-            return readln()
+            val inputData = readln()
+            Log.logMyHistory(inputData)
+            return inputData
         }
     }
 
     object Talk {
-        fun sayHowManyTimeToAsk() = println("How many times to ask?")
+        fun sayHowManyTimeToAsk() {
+            val outputData = "How many times to ask?"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayPrintTheDefinitionOf(term: String) {
+            val outputData = "Print the definition of \"$term\":"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayCorrect() {
+            val outputData = "Correct!"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayWrongButDefinitionIsExist(rightAnswer: String, rightTermForDefinition: String) {
+            val outputData = "Wrong. The right answer is \"$rightAnswer\", but your definition is correct for \"$rightTermForDefinition\"."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
 
-        fun sayPrintTheDefinitionOf(term: String) = println("Print the definition of \"$term\":")
-
-        fun sayCorrect() = println("Correct!")
-
-        fun sayWrongButDefinitionIsExist(rightAnswer: String, rightTermForDefinition: String) =
-            println(
-                "Wrong. The right answer is \"$rightAnswer\", but your definition is correct for \"$rightTermForDefinition\"."
-            )
-
-        fun sayWrong(rightAnswer: String) = println("Wrong. The right answer is \"$rightAnswer\".")
-
-        fun sayInputTheAction() =
-            println("Input the action (add, remove, import, export, ask, exit):")
-
-        fun sayInputCard() = println("The card:")
-
-        fun sayInputCardDefinition() = println("The definition of the card:")
-
-        fun sayTermAlreadyExists(term: String) =
-            println("The card \"$term\" already exists.")
-
-        fun sayDefinitionAlreadyExists(definition: String) =
-            println("The definition \"$definition\" already exists. Try again:")
-
-        fun sayPairAdded(term: String, definition: String) =
-            println("The pair (\"$term\":\"$definition\") has been added.")
-
-        fun sayWhichCard() = println("Which card?")
-
-        fun sayCardRemoved() = println("The card has been removed.")
-
-        fun sayCanNotRemove(term: String) =
-            println("Can't remove \"$term\": there is no such card.")
-
-        fun sayBye() = println("Bye bye!")
-
-        fun sayFileNotFound() = println("File not found.")
-
-        fun sayCardsHaveBeenLoaded(numberOfLoadedCards: Int) =
-            println("$numberOfLoadedCards cards have been loaded.")
-
-        fun sayFileName() = println("File name:")
-
-        fun sayCardSaved(numberOfCards: Int) = println("$numberOfCards cards have been saved.")
-
+        fun sayWrong(rightAnswer: String) {
+            val outputData = "Wrong. The right answer is \"$rightAnswer\"."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayInputTheAction() {
+            val outputData = "Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayInputCard() {
+            val outputData = "The card:"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayInputCardDefinition() {
+            val outputData = "The definition of the card:"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayTermAlreadyExists(term: String) {
+            val outputData = "The card \"$term\" already exists."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayDefinitionAlreadyExists(definition: String) {
+            val outputData = "The definition \"$definition\" already exists. Try again:"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayPairAdded(term: String, definition: String) {
+            val outputData = "The pair (\"$term\":\"$definition\") has been added."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayWhichCard() {
+            val outputData = "Which card?"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayCardRemoved() {
+            val outputData = "The card has been removed."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayCanNotRemove(term: String) {
+            val outputData = "Can't remove \"$term\": there is no such card."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayBye() {
+            val outputData = "Bye bye!"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayFileNotFound() {
+            val outputData = "File not found."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayCardsHaveBeenLoaded(numberOfLoadedCards: Int) {
+            val outputData = "$numberOfLoadedCards cards have been loaded."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayFileName() {
+            val outputData = "File name:"
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayCardSaved(numberOfCards: Int) {
+            val outputData = "$numberOfCards cards have been saved."
+            Log.logMyHistory(outputData)
+            println(outputData)
+        }
+        fun sayLogHasBeenSaved() = println("The log has been saved.")
     }
 
     object WorkWithCards {
@@ -114,6 +169,26 @@ class Bot {
                 }
                 listMyCards.remove(randomCard)
             }
+        }
+    }
+
+    object Log {
+
+        fun logMyHistory(data: String) {
+            val pathFileForLog = "MyLog.txt"
+            if (File(pathFileForLog).exists()) {
+                File(pathFileForLog).appendText("${data}\n")
+            } else {
+                File(pathFileForLog).writeText("${data}\n")
+            }
+        }
+
+
+        fun log() {
+            Talk.sayFileName()
+            val pathFileForLog = readData()
+            Files.move(Path("MyLog.txt"), Path(pathFileForLog))
+            Talk.sayLogHasBeenSaved()
         }
     }
 

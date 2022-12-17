@@ -6,7 +6,7 @@ import java.io.File
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 
-class File {
+class MyFile {
 
     val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())

@@ -7,6 +7,9 @@ const val EXIT = "exit"
 const val IMPORT = "import"
 const val EXPORT = "export"
 const val ASK = "ask"
+const val LOG = "log"
+const val HARDEST_CARD = "hardest card"
+const val RESET_STATS = "reset stats"
 
 fun main() {
     StartProgram().start()

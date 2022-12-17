@@ -21,11 +21,15 @@ class StartProgram {
                 start()
             }
             IMPORT -> {
-                File().ImportCards().import()
+                MyFile().ImportCards().import()
                 start()
             }
             EXPORT -> {
-                File().ExportCards().export()
+                MyFile().ExportCards().export()
+                start()
+            }
+            LOG -> {
+                Bot.Log.log()
                 start()
             }
             EXIT -> {
