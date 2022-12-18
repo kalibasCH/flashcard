@@ -1,3 +1,3 @@
 package flashcards
 
-class Card(val term: String, val definition: String, var numberOfErrorInCard: Int = 0)
+data class Card(val term: String, val definition: String, var numberOfErrorInCard: Int = 0)

@@ -1,0 +1,69 @@
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+add
+The card:
+France
+The definition of the card:
+Eiffel Tower
+The pair ("France":"Eiffel Tower") has been added.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+import
+File name:
+capitals.txt
+File not found.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+import
+File name:
+capitals.json
+File not found.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+add
+The card:
+France
+The definition of the card:
+Elf
+The pair ("France":"Elf") has been added.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+import
+File name:
+capitals.json
+File not found.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+add
+The card:
+agfaeg
+The definition of the card:
+rhbern
+The pair ("agfaeg":"rhbern") has been added.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+add
+The card:
+1
+The definition of the card:
+2
+The pair ("1":"2") has been added.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+add
+The card:
+2
+The definition of the card:
+4
+The pair ("2":"4") has been added.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+ask
+How many times to ask?
+3
+Print the definition of "2":
+5
+Wrong. The right answer is "4".
+Print the definition of "agfaeg":
+6
+Wrong. The right answer is "rhbern".
+Print the definition of "1":
+2
+Correct!
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+hardest card
+The hardest cards are kotlin.Unit. You have 1 errors answering them.
+Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):

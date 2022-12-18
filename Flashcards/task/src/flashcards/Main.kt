@@ -1,6 +1,6 @@
 package flashcards
 
-val mutableMapCardsNameAndDefinition = mutableMapOf<String, String>()
+val mutableListOfMyCards = mutableListOf<Card>()
 const val ADD = "add"
 const val REMOVE = "remove"
 const val EXIT = "exit"

@@ -1,6 +1,5 @@
 package flashcards
 
-import com.example.flashcards.*
 import kotlin.system.exitProcess
 
 class StartProgram {
@@ -30,6 +29,14 @@ class StartProgram {
             }
             LOG -> {
                 Bot.Log.log()
+                start()
+            }
+            HARDEST_CARD -> {
+                Bot.Talk.sayHardestCard()
+                start()
+            }
+            RESET_STATS -> {
+                Bot.WorkWithCards.resetStats()
                 start()
             }
             EXIT -> {
