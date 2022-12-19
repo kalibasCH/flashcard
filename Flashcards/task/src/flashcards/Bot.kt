@@ -166,13 +166,15 @@ class Bot {
     object WorkWithCards {
         fun addedCard() {
             Talk.sayInputCard()
-            val term = readData()
+            val termToAdd = readData()
+
             mutableListOfMyCards.forEach {
-                if (it.term == term) {
-                    Talk.sayTermAlreadyExists(term)
+                if (it.term == termToAdd) {
+                    Talk.sayTermAlreadyExists(termToAdd)
                     return
                 }
             }
+
             Talk.sayInputCardDefinition()
             val definition = readData()
             mutableListOfMyCards.forEach {
@@ -181,21 +183,27 @@ class Bot {
                     return
                 }
             }
-            mutableListOfMyCards += Card(term, definition)
-            Talk.sayPairAdded(term, definition)
+
+            mutableListOfMyCards += Card(termToAdd, definition)
+            Talk.sayPairAdded(termToAdd, definition)
         }
 
         fun removedCard() {
             Talk.sayWhichCard()
-            val cardToRemove = readData()
+            val termOfCardToRemove = readData()
+            val mutableListToRemove = mutableListOf<Card>()
             mutableListOfMyCards.forEach {
-                if (it.term == cardToRemove) {
-                    mutableListOfMyCards.remove(it)
-                    Talk.sayCardRemoved()
-                } else {
-                    Talk.sayCanNotRemove(cardToRemove)
+                if (it.term == termOfCardToRemove) {
+                    mutableListToRemove.add(it)
                 }
             }
+            if (mutableListToRemove.isNotEmpty()) {
+                mutableListOfMyCards.removeAll(mutableListToRemove)
+                Talk.sayCardRemoved()
+            } else {
+                Talk.sayCanNotRemove(termOfCardToRemove)
+            }
+
         }
 
         fun ask() {

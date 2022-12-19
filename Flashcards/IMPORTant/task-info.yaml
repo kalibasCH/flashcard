@@ -644,6 +644,382 @@ files:
     \   \"London\",\n                \"Abuja\",\n                \"Berlin\"\n    \
     \    );\n    }\n    \n}\n"
   learner_created: false
+- name: src/flashcards/Bot.kt
+  visible: true
+  text: |-
+    package flashcards
+
+    import java.util.Random
+    import java.io.File
+    import java.nio.file.Files
+    import kotlin.io.path.Path
+
+    class Bot {
+
+        companion object {
+            fun readData(): String {
+                val inputData = readln()
+                Log.logMyHistory(inputData)
+                return inputData
+            }
+        }
+
+        object Talk {
+            fun sayHowManyTimeToAsk() {
+                val outputData = "How many times to ask?"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayPrintTheDefinitionOf(term: String) {
+                val outputData = "Print the definition of \"$term\":"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayCorrect() {
+                val outputData = "Correct!"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayWrongButDefinitionIsExist(rightAnswer: String, rightTermForDefinition: String) {
+                val outputData =
+                    "Wrong. The right answer is \"$rightAnswer\", but your definition is correct for \"$rightTermForDefinition\"."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayWrong(rightAnswer: String) {
+                val outputData = "Wrong. The right answer is \"$rightAnswer\"."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayInputTheAction() {
+                val outputData =
+                    "Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayInputCard() {
+                val outputData = "The card:"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayInputCardDefinition() {
+                val outputData = "The definition of the card:"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayTermAlreadyExists(term: String) {
+                val outputData = "The card \"$term\" already exists."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayDefinitionAlreadyExists(definition: String) {
+                val outputData = "The definition \"$definition\" already exists. Try again:"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayPairAdded(term: String, definition: String) {
+                val outputData = "The pair (\"$term\":\"$definition\") has been added."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayWhichCard() {
+                val outputData = "Which card?"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayCardRemoved() {
+                val outputData = "The card has been removed."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayCanNotRemove(term: String) {
+                val outputData = "Can't remove \"$term\": there is no such card."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayBye() {
+                val outputData = "Bye bye!"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayFileNotFound() {
+                val outputData = "File not found."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayCardsHaveBeenLoaded(numberOfLoadedCards: Int) {
+                val outputData = "$numberOfLoadedCards cards have been loaded."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayFileName() {
+                val outputData = "File name:"
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayCardSaved(numberOfCards: Int) {
+                val outputData = "$numberOfCards cards have been saved."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayCardStatisticsReset() {
+                val outputData = "Card statistics have been reset."
+                Log.logMyHistory(outputData)
+                println(outputData)
+            }
+
+            fun sayHardestCard() {
+                var outputData = ""
+                val maxNumErrors =
+                    mutableListOfMyCards.maxByOrNull { it.numberOfErrorInCard }?.numberOfErrorInCard
+                val hardestCards =
+                    mutableListOfMyCards.filter { it.numberOfErrorInCard == maxNumErrors }
+                val listStringTerm = mutableListOf<String>()
+                if (hardestCards.isNotEmpty() && hardestCards.size > 1 && maxNumErrors != 0) {
+                    hardestCards.forEach { listStringTerm.add(it.term) }
+                    outputData += "The hardest cards are "
+                    listStringTerm.forEach { outputData += if (listStringTerm.last() != it) "\"${it}\", " else "\"${it}\"" }
+                    outputData += ". You have $maxNumErrors errors answering them."
+                } else if (hardestCards.size == 1 && maxNumErrors != 0) {
+                    hardestCards.forEach { listStringTerm.add(it.term) }
+                    outputData = "The hardest card is \"${listStringTerm[0]}\". You have $maxNumErrors errors answering it."
+                } else {
+                    println("There are no cards with errors.")
+                }
+                println(outputData)
+                Log.logMyHistory(outputData)
+            }
+
+            fun sayLogHasBeenSaved() = println("The log has been saved.")
+        }
+
+        object WorkWithCards {
+            fun addedCard() {
+                Talk.sayInputCard()
+                val term = readData()
+                mutableListOfMyCards.forEach {
+                    if (it.term == term) {
+                        Talk.sayTermAlreadyExists(term)
+                        return
+                    }
+                }
+                Talk.sayInputCardDefinition()
+                val definition = readData()
+                mutableListOfMyCards.forEach {
+                    if (it.definition == definition) {
+                        Talk.sayDefinitionAlreadyExists(definition)
+                        return
+                    }
+                }
+                mutableListOfMyCards += Card(term, definition)
+                Talk.sayPairAdded(term, definition)
+            }
+
+            fun removedCard() {
+                Talk.sayWhichCard()
+                val cardToRemove = readData()
+                mutableListOfMyCards.forEach {
+                    if (it.term == cardToRemove) {
+                        mutableListOfMyCards.remove(it)
+                        Talk.sayCardRemoved()
+                    } else {
+                        Talk.sayCanNotRemove(cardToRemove)
+                    }
+                }
+            }
+
+            fun ask() {
+                Talk.sayHowManyTimeToAsk()
+                val numberOfQuestions = readData().toInt()
+                val newListOfMyCards = mutableListOf<Card>()
+                newListOfMyCards.addAll(mutableListOfMyCards)
+                repeat(numberOfQuestions) {
+                    val randomCard =
+                        newListOfMyCards[Random().nextInt(newListOfMyCards.size)]
+                    Talk.sayPrintTheDefinitionOf(randomCard.term)
+                    val answer = readData()
+
+                    val isItAnswerInCards = mutableListOfMyCards.filter { it.definition == answer }
+
+                    if (answer == randomCard.definition) {
+                        Talk.sayCorrect()
+                    } else if (isItAnswerInCards.isNotEmpty()) {
+                        mutableListOfMyCards.forEach { if (it == randomCard) it.numberOfErrorInCard++ }
+                        Talk.sayWrongButDefinitionIsExist(
+                            randomCard.definition,
+                            isItAnswerInCards[0].term
+                        )
+                    } else {
+                        mutableListOfMyCards.forEach { if (it == randomCard) it.numberOfErrorInCard++ }
+                        Talk.sayWrong(randomCard.definition)
+                    }
+                    newListOfMyCards.remove(randomCard)
+                }
+            }
+
+            fun resetStats() {
+                mutableListOfMyCards.forEach { it.numberOfErrorInCard = 0 }
+                Talk.sayCardStatisticsReset()
+            }
+        }
+
+        object Log {
+            fun logMyHistory(data: String) {
+                val pathFileForLog = "MyLog.txt"
+                if (File(pathFileForLog).exists()) {
+                    File(pathFileForLog).appendText("${data}\n")
+                } else {
+                    File(pathFileForLog).writeText("${data}\n")
+                }
+            }
+
+            fun log() {
+                Talk.sayFileName()
+                val pathFileForLog = readData()
+                Files.move(Path("MyLog.txt"), Path(pathFileForLog))
+                Talk.sayLogHasBeenSaved()
+            }
+        }
+
+    }
+  learner_created: true
+- name: MyLog.txt
+  visible: true
+  text: |
+    Input the action (add, remove, import, export, ask, exit, log, hardest card, reset stats):
+    exit
+    Bye bye!
+  learner_created: true
+- name: src/flashcards/File.kt
+  visible: true
+  text: |-
+    package flashcards
+
+    import com.squareup.moshi.KotlinJsonAdapterFactory
+    import java.io.File
+    import com.squareup.moshi.Moshi
+    import com.squareup.moshi.Types
+
+    class MyFile {
+
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+
+        val type = Types.newParameterizedType(List::class.java, Card::class.java)
+        val cardAdapter = moshi.adapter<List<Card>>(type)
+
+        inner class ImportCards {
+            fun import() {
+                Bot.Talk.sayFileName()
+                val pathFile = Bot.readData()
+                if (!File(pathFile).exists()) {
+                    Bot.Talk.sayFileNotFound()
+                } else {
+                    var countImportedCard = 0
+                    cardAdapter.fromJson(File(pathFile).readLines()[0])
+                        ?.forEach {
+                            countImportedCard++
+                            mutableListOfMyCards.add(it)
+                        }
+                    Bot.Talk.sayCardsHaveBeenLoaded(countImportedCard)
+                }
+            }
+        }
+
+        inner class ExportCards {
+            fun export() {
+                Bot.Talk.sayFileName()
+                val pathFile = Bot.readData()
+                val fileToExport = File(pathFile)
+                fileToExport.writeText(cardAdapter.toJson(mutableListOfMyCards))
+                Bot.Talk.sayCardSaved(mutableListOfMyCards.size)
+            }
+        }
+    }
+  learner_created: true
+- name: src/flashcards/Card.kt
+  visible: true
+  text: |
+    package flashcards
+
+    data class Card(val term: String, val definition: String, var numberOfErrorInCard: Int = 0)
+  learner_created: true
+- name: src/flashcards/StartProgram.kt
+  visible: true
+  text: |-
+    package flashcards
+
+    import kotlin.system.exitProcess
+
+    class StartProgram {
+
+        fun start() {
+            Bot.Talk.sayInputTheAction()
+            when (Bot.readData()) {
+                ADD -> {
+                    Bot.WorkWithCards.addedCard()
+                    start()
+                }
+                REMOVE -> {
+                    Bot.WorkWithCards.removedCard()
+                    start()
+                }
+                ASK -> {
+                    Bot.WorkWithCards.ask()
+                    start()
+                }
+                IMPORT -> {
+                    MyFile().ImportCards().import()
+                    start()
+                }
+                EXPORT -> {
+                    MyFile().ExportCards().export()
+                    start()
+                }
+                LOG -> {
+                    Bot.Log.log()
+                    start()
+                }
+                HARDEST_CARD -> {
+                    Bot.Talk.sayHardestCard()
+                    start()
+                }
+                RESET_STATS -> {
+                    Bot.WorkWithCards.resetStats()
+                    start()
+                }
+                EXIT -> {
+                    Bot.Talk.sayBye()
+                    exitProcess(0)
+                }
+            }
+        }
+    }
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/7492#comment
-status: Unchecked
-record: -1
+status: Solved
+feedback:
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: Mon, 19 Dec 2022 11:38:48 UTC
+record: 8

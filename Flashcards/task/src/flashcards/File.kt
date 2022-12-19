@@ -15,9 +15,7 @@ class MyFile {
     val cardAdapter = moshi.adapter<List<Card>>(type)
 
     inner class ImportCards {
-        fun import() {
-            Bot.Talk.sayFileName()
-            val pathFile = Bot.readData()
+        fun import(pathFile: String) {
             if (!File(pathFile).exists()) {
                 Bot.Talk.sayFileNotFound()
             } else {
@@ -33,9 +31,7 @@ class MyFile {
     }
 
     inner class ExportCards {
-        fun export() {
-            Bot.Talk.sayFileName()
-            val pathFile = Bot.readData()
+        fun export(pathFile: String) {
             val fileToExport = File(pathFile)
             fileToExport.writeText(cardAdapter.toJson(mutableListOfMyCards))
             Bot.Talk.sayCardSaved(mutableListOfMyCards.size)
